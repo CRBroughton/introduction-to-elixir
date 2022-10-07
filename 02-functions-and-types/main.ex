@@ -8,4 +8,6 @@ defmodule Playground do
       3.14159 * r * r
     end
   end
+
+  def area_of_circle!(x, y), do: x * y
 end
