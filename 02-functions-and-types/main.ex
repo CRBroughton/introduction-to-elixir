@@ -3,6 +3,10 @@ defmodule Playground do
     a * b
   end
 
+  def run do
+    area(10, 20)
+  end
+
   defmodule Circle do
     def area(r) do
       3.14159 * r * r
