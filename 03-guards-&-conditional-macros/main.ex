@@ -23,3 +23,23 @@ defmodule LambdaPlayground do
       :positive
   end
 end
+
+defmodule ConditionalPlayground do
+  def max(a, b) do
+    if a >= b, do: a, else: b
+  end
+
+  def max(a, b) do
+    # Same as the above, but with unless
+    unless a >= b, do: b, else: a
+  end
+
+  # Chained conditionals
+  def max(a, b) do
+    cond do
+      # Return the first condition if satisfied, else return b
+      a >= b -> a
+      true -> b
+    end
+  end
+end
