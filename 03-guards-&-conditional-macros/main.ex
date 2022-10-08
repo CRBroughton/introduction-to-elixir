@@ -47,6 +47,7 @@ defmodule ConditionalPlayground do
     case a >= b do
       true -> a
       false -> b
+      _ -> :error
     end
   end
 end
