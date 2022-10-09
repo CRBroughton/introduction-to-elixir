@@ -23,6 +23,10 @@ defmodule Playground do
   def enumReduce(a) do
     Enum.reduce(a, 0, fn x, y -> x + y end)
   end
+
+  def forLoop(a) do
+    for x <- a, do: x * x
+  end
 end
 
 # Example:
