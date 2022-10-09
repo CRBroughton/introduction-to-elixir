@@ -2,8 +2,8 @@ defmodule TaskList do
   # returns an empty Map
   def new(), do: MultiStorage.new()
 
-  def add_task(task_list, date, body) do
-    MultiStorage.add(task_list, date, body)
+  def add_task(task_list, entry) do
+    MultiStorage.add(task_list, entry.date, entry)
   end
 
   def get_tasks(task_list, date) do
@@ -33,4 +33,5 @@ defmodule MultiStorage do
 end
 
 # Creating a new store example:
-# task_list = TaskList.new() |> TaskList.add_task(~D[2019-01-12], "Get Milk")
+# entry = %{date: ~D[2019-01-12], task: "Get Milk"}
+# task_list = TaskList.new() |> TaskList.add_task(entry)
