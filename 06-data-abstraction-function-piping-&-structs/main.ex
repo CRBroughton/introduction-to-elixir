@@ -1,7 +1,13 @@
 defmodule TaskList do
   defstruct id: 0, entries: %{}
 
-  def new(), do: %TaskList{}
+  def new(entries \\ []) do # Optional argument with fallback
+    Enum.reduce(
+      entries,
+      %TaskList{},
+      fn entry, acc -> add_task(acc, entry) end
+    )
+  end
 
   def add_task(task_list, entry) do
     entry = Map.put(entry, :id, task_list.id)
