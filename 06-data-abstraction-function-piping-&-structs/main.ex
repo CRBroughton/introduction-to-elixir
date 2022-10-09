@@ -1,49 +1,46 @@
-defmodule Fraction do
-  defstruct x: nil, y: nil
-
-  def new(x, y) do
-    %Fraction{x: x, y: y}
-  end
-
-  def value(%Fraction{x: x, y: y}) do
-    x / y
-  end
-end
-
 defmodule TaskList do
-  # returns an empty Map
-  def new(), do: MultiStorage.new()
+  defstruct id: 0, entries: %{}
+
+  def new(), do: %TaskList{}
 
   def add_task(task_list, entry) do
-    MultiStorage.add(task_list, entry.date, entry)
+    entry = Map.put(entry, :id, task_list.id)
+
+    new_entries = Map.put(
+      task_list.entries,
+      task_list.id,
+      entry
+    )
+
+    %TaskList{task_list | entries: new_entries, id: task_list.id + 1}
   end
 
   def get_tasks(task_list, date) do
-    MultiStorage.get(task_list, date)
+    task_list.entries
+    |> Stream.filter(fn {_, entry} -> entry.date == date end)
+    |> Enum.map(fn {_, entry} -> entry end)
+  end
+
+  def update_task(task_list, %{} = new_entry) do
+    update_task(task_list, new_entry.id, fn _old_entry -> new_entry end)
+  end
+
+  def update_task(task_list, entry_id, update_fn) do
+    case Map.fetch(task_list.entries, entry_id) do
+      :error ->
+        task_list
+
+      {:ok, old_entry} ->
+        new_entry = update_fn.(old_entry)
+
+        new_entries =
+          Map.put(
+            task_list.entries,
+            new_entry.id,
+            new_entry
+          )
+
+        %TaskList{task_list | entries: new_entries}
+    end
   end
 end
-
-defmodule MultiStorage do
-  # returns an empty Map
-  def new(), do: %{}
-
-  # Updates the task_lists map based on the Date as a key
-  # If there is no task, puts the task into the Map.
-  # If there are already tasks, adds the new task to the existing Map.
-  def add(storage, key, value) do
-    Map.update(
-      storage,
-      key,
-      [value],
-      fn values -> [value | values] end
-    )
-  end
-
-  def get(storage, key) do
-    Map.get(storage, key, []) # Empty list fallback([])
-  end
-end
-
-# Creating a new store example:
-# entry = %{date: ~D[2019-01-12], task: "Get Milk"}
-# task_list = TaskList.new() |> TaskList.add_task(entry)
